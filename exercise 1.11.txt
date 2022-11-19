@@ -1,0 +1,102 @@
+import { useState } from 'react'
+
+const StatisticLine = props => <>
+  <p>{props.text} {props.value} {props.percent}</p>
+  </>
+
+const Button = (props) => (
+  <button onClick={props.handleClick}>
+    {props.text}
+  </button>
+)
+
+const Statistics = (props) => {
+  
+  return (
+    <div><h1>statistics</h1>
+    <table>
+    <tbody>
+    <tr>
+      <td><StatisticLine text = "good" /></td>
+      <td><StatisticLine value={props.good} /></td>
+    </tr>
+    <tr>
+      <td><StatisticLine text = "neutral"/></td>
+      <td><StatisticLine value={props.neutral} /></td>
+    </tr>
+    <tr
+    ><td><StatisticLine text = "bad"/></td>
+    <td><StatisticLine value={props.bad}/></td>
+    </tr>
+    <tr>
+      <td><StatisticLine text = "all"/></td>
+      <td><StatisticLine value={props.good + props.neutral + props.bad}/></td>
+    </tr>
+    <tr>
+      <td><StatisticLine text = "all"/></td>
+      <td><StatisticLine value={(props.good + props.neutral + props.bad)/3}/></td>
+    </tr>
+    <tr>
+      <td><StatisticLine text = "all"/></td>
+      <td><StatisticLine value={(props.good)/(props.good + props.neutral + props.bad) * 100} percent = {props.percent}/></td>
+    </tr>
+    </tbody>
+    </table>
+  </div>
+  
+  )
+}
+
+const App = () => {
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [allClicks, setAll] = useState([])
+
+  const setGoodValue = newGoodValue => {
+    console.log('good number', newGoodValue)
+    setAll(allClicks.concat('G'))
+    setGood(newGoodValue)
+  }
+
+  const setNeutralValue = newNeutralValue => {
+    console.log('neutral number', newNeutralValue)
+    setAll(allClicks.concat('N'))
+    setNeutral(newNeutralValue)
+  }
+
+  const setBadValue = newBadValue => {
+    console.log('bad number', newBadValue)
+    setAll(allClicks.concat('B'))
+    setBad(newBadValue)
+  }
+
+  return (
+    <div>
+      <h1>give feedback</h1>
+      <Button handleClick={() => setGoodValue(good + 1)} text="good" />
+      <Button handleClick={() => setNeutralValue(neutral + 1)} text="neutral" />
+      <Button handleClick={() => setBadValue(bad + 1)} text="bad" />
+      <History allClicks = {allClicks} good = {good} neutral = {neutral} bad = {bad}/>
+      
+      </div>
+  )
+}
+
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        <br />
+        No feedback given
+      </div>
+    )
+  }
+  return (
+    <div>
+      <Statistics good = {props.good} neutral = {props.neutral} bad = {props.bad} percent = "%"/>
+    </div>
+  )
+}
+
+export default App
